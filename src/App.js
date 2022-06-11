@@ -2,25 +2,25 @@ import React from 'react';
 class App extends React.Component {
   state = {
     isLoading: true,
-    users: [],
+    printers: [],
     error: null
   };
-  getFetchUsers() {
+  getFetchprinters() {
     this.setState({
       loading: true
     }, () => {
       fetch("http://localhost:3001/json").then(res => res.json()).then(result => this.setState({
         loading: false,
-        users: result
+        printers: result
       })).catch(console.log);
     });
   }
   componentDidMount() {
-    this.getFetchUsers();
+    this.getFetchprinters();
   }
   render() {
     const {
-      users,
+      printers,
       error
     } = this.state;
     return (
@@ -31,7 +31,7 @@ class App extends React.Component {
             {
               error.message
             } < /p> : null}  {
-              users.map(user => {
+              printers.map(printer => {
                 const {
                   ID,
                   Producent,
@@ -40,10 +40,10 @@ class App extends React.Component {
                   Desc,
                   Price,
                   Image
-                } = user;
+                } = printer;
                 return (
                   <div id={ID} key={ID}>
-                    <img src={Image}/>
+                    <img src={Image} />
                     <p>Name: {Model}</p>
                     <p>Productent: {Producent}</p>
                     <p>Type: {Type}</p>
