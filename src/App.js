@@ -9,8 +9,8 @@ class App extends React.Component {
     error: null,
   };
   onChange = (e) => {
-    console.log(this.state.printers.length)
     let temp = [];
+    if (this.state.printers.length < 2)
       this.state.printers = this.state.printersall;
 
     switch (e.currentTarget.id) {
@@ -32,6 +32,16 @@ class App extends React.Component {
       case "Type":
         for (let i = 0; i < this.state.printers.length; i++) {
           if (this.state.printers[i].Type === e.currentTarget.value)
+            temp.push(this.state.printers[i]);
+        }
+        this.setState({
+          printers: temp,
+        });
+
+        break;
+      case "Producent":
+        for (let i = 0; i < this.state.printers.length; i++) {
+          if (this.state.printers[i].Producent === e.currentTarget.value)
             temp.push(this.state.printers[i]);
         }
         this.setState({
@@ -107,6 +117,10 @@ class App extends React.Component {
                 id="Price"
                 className="form-select"
               >
+                <option disabled hidden>
+                  Select
+                </option>
+
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
@@ -119,6 +133,9 @@ class App extends React.Component {
                 id="Producent"
                 className="form-select"
               >
+                <option disabled hidden>
+                  Select
+                </option>
                 {error ? <p> {error.message} </p> : null}{" "}
                 {producents.map((typ) => {
                   const { Producent } = typ;
@@ -134,6 +151,10 @@ class App extends React.Component {
                 id="Type"
                 className="form-select"
               >
+                <option disabled hidden>
+                  {" "}
+                  Select
+                </option>
                 {error ? <p> {error.message} </p> : null}{" "}
                 {typess.map((typ) => {
                   const { Type } = typ;
@@ -141,21 +162,13 @@ class App extends React.Component {
                 })}
               </select>
             </div>
-            <div>
-              <button
-                class="btn btn-outline-dark"
-                onClick={this.getFetchprinters}
-              >
-                Reset
-              </button>
-            </div>
           </div>
           {error ? <p> {error.message} </p> : null}{" "}
           {printers.map((printer) => {
             const { ID, Producent, Model, Type, Price, Image } = printer;
             return (
               <div id={ID} key={ID}>
-                <img alt={Model} src={Image} />
+                <img width="100" alt={Model} src={Image} />
                 <p>Name: {Model}</p>
                 <p>Productent: {Producent}</p>
                 <p>Type: {Type}</p>
