@@ -8,6 +8,17 @@ class App extends React.Component {
     producents: [],
     error: null,
   };
+
+  handleClick = (e) => {
+    let id = e.currentTarget.id
+    let temp
+    for (let i = 0; i < this.state.printersall.length; i++) {
+      if(this.state.printersall[i].ID == id)
+      temp = this.state.printersall[i]
+      
+    }
+  };
+
   onChange = (e) => {
     let temp = [];
     if (this.state.printers.length < 2)
@@ -173,6 +184,7 @@ class App extends React.Component {
                 <p>Productent: {Producent}</p>
                 <p>Type: {Type}</p>
                 <p>Price: {Price}</p>
+                <button id={ID} onClick={this.handleClick}>Click me</button>
                 <hr />
               </div>
             );
