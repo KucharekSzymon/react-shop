@@ -1,53 +1,65 @@
-import { func } from 'prop-types';
 import React from 'react';
 class App extends React.Component {
   state = {
     isLoading: true,
     printers: [],
+    typess: [],
+    producents: [],
     error: null
   };
-  sortChange() {
-    let sortPrice = '', sortProducent = '', sortType = '';
-    console.log('sort');
-    // if (input.id == "Price") {
-    //   sortPrice = input.value;
-    // }
-    // else if (input.id == "Producent") {
-    //   sortProducent = input.value;
-    // }
-    // else if (input.id == "Type") {
-    //   sortType = input.value;
-    // }//        url: 'http://localhost:3000/json/sortby=?Price=' + sortPrice + '&Producent=' + sortProducent + '&Type=' + sortType,
+  onChange = e => {
+    let temp = []
+    
+    switch (e.currentTarget.id) {
+      case "Price":
+        if (e.currentTarget.value === "ASC") {
+          this.setState({
+            printers: this.state.printers.sort((a, b) => parseFloat(a.Price) - parseFloat(b.Price))
+          });
+        }
+        else if (e.currentTarget.value === "DESC") {
+          this.setState({
+            printers: this.state.printers.sort((a, b) => parseFloat(b.Price) - parseFloat(a.Price))
+          });
+        }
+        break;
+      case "Type":
+        for (let i = 0; i < this.state.printers.length; i++) {
+          if(this.state.printers[i].Type === e.currentTarget.value)
+            temp.push(this.state.printers[i])
+        }
+        this.setState({
+          printers: temp
+        })
 
-    // this.setState({
-    //   loading: true
-    // }, () => {
-    //   fetch('http://localhost:3000/json/sortby=?Price=' + sortPrice + '&Producent=' + sortProducent + '&Type=' + sortType).then(res => res.json()).then(result => this.setState({
-    //     loading: false,
-    //     printers: result
-    //   })).catch(console.log);
-    // });
+        break;
+        default:
+          break;
+    }
+
+
   }
+
   getFetchprinters() {
     this.setState({
       loading: true
     }, () => {
-      fetch("http://localhost:3001/json").then(res => res.json()).then(result => this.setState({
+      fetch("http://localhost:3001/json/").then(res => res.json()).then(result => this.setState({
         loading: false,
-        printers: result
+        printers: result //.sort((a, b) => parseFloat(a.Price) - parseFloat(b.Price))x
+      })).catch(console.log);
+      fetch("http://localhost:3001/json/types").then(res => res.json()).then(result => this.setState({
+        loading: false,
+        typess: result
+      })).catch(console.log);
+      fetch("http://localhost:3001/json/producents").then(res => res.json()).then(result => this.setState({
+        loading: false,
+        producents: result
       })).catch(console.log);
     });
   }
-  // getFetchproducents() {
-  //   this.setState({
-  //     loading: true
-  //   }, () => {
-  //     fetch("http://localhost:3001/json/producents").then(res => res.json()).then(result => this.setState({
-  //       loading: false,
-  //       producents: result
-  //     })).catch(console.log);
-  //   });
-  // }
+
+
 
   componentDidMount() {
     this.getFetchprinters();
@@ -55,8 +67,8 @@ class App extends React.Component {
   render() {
     const {
       printers,
+      typess,
       producents,
-      types,
       error
     } = this.state;
     return (
@@ -69,24 +81,31 @@ class App extends React.Component {
           </div>
           <div>
             <span>Price</span>
-            <select defaultValue="Select" onChange={this.sortChange()} id="Price" className="form-select">
+            <select onChange={this.onChange} defaultValue="Select" id="Price" className="form-select">
               <option value="ASC">ASC</option>
               <option value="DESC">DESC</option>
             </select>
           </div>
           <div>
             <span>Producent</span>
-            <select defaultValue="Select" onChange={this.sortChange()} id="Producent" className="form-select">
-              <option value="">None</option>
-            </select>
+            <select onChange={this.onChange} defaultValue="Select" id="Producent" className="form-select">
+              {
+                error ? <p> {error.message} </p> : null}  {
+                producents.map(typ => {
+                  const { Producent } = typ;
+                  return (
+                    <option key={Producent}>{Producent}</option>
+                  );
+                })
+              }            </select>
           </div>
           <div>
             <span>Type</span>
-            <select defaultValue="Select" onChange={this.sortChange()} id="Type" className="form-select">
+            <select onChange={this.onChange} defaultValue="Select" id="Type" className="form-select">
               {
                 error ? <p> {error.message} </p> : null}  {
-                printers.map(type => {
-                  const { Type } = type;
+                typess.map(typ => {
+                  const { Type } = typ;
                   return (
                     <option key={Type}>{Type}</option>
                   );
