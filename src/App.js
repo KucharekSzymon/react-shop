@@ -10,12 +10,10 @@ class App extends React.Component {
   };
 
   handleClick = (e) => {
-    let id = e.currentTarget.id
-    let temp
+    let id = e.currentTarget.id;
+    let temp;
     for (let i = 0; i < this.state.printersall.length; i++) {
-      if(this.state.printersall[i].ID == id)
-      temp = this.state.printersall[i]
-      
+      if (this.state.printersall[i].ID == id) temp = this.state.printersall[i];
     }
   };
 
@@ -65,6 +63,13 @@ class App extends React.Component {
     }
   };
 
+
+  modal = (e) => {
+    console.log(e.currentTarget.id);
+
+  }
+
+
   getFetchprinters() {
     this.setState(
       {
@@ -77,7 +82,7 @@ class App extends React.Component {
             this.setState({
               loading: false,
               printers: result,
-              printersall: result, //.sort((a, b) => parseFloat(a.Price) - parseFloat(b.Price))x
+              printersall: result,
             })
           )
           .catch(console.log);
@@ -176,7 +181,7 @@ class App extends React.Component {
           </div>
           {error ? <p> {error.message} </p> : null}{" "}
           {printers.map((printer) => {
-            const { ID, Producent, Model, Type, Price, Image } = printer;
+            const { ID, Producent, Model, Type, Price, Desc, Image } = printer;
             return (
               <div id={ID} key={ID}>
                 <img width="100" alt={Model} src={Image} />
@@ -184,7 +189,19 @@ class App extends React.Component {
                 <p>Productent: {Producent}</p>
                 <p>Type: {Type}</p>
                 <p>Price: {Price}</p>
-                <button id={ID} onClick={this.handleClick}>Click me</button>
+                <button id={ID} onClick={this.modal} >Show Printer</button>
+                <div class="modal" id={ID}>
+                  <div class="modal-header">
+                    <div class="title">{Producent} {Model}</div>
+                    <div>{Desc}</div>
+                    <button data-close-button class="close-button">
+                      &times;
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    asd
+                  </div>
+                </div>
                 <hr />
               </div>
             );
