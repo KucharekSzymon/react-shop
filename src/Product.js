@@ -1,14 +1,12 @@
 import React, { ReactDOM } from "react";
-import Printer from "./Product";
-class App extends React.Component {
+class Printer extends React.Component {
   state = {
-    type: App,
+    type: Printer,
     isLoading: true,
     printersall: [],
     printers: [],
     typess: [],
     producents: [],
-    szukany: 0,
     error: null,
   };
 
@@ -67,18 +65,10 @@ class App extends React.Component {
   };
 
   modal = (e) => {
-    if(e.currentTarget.id == "back"){
-      this.setState({
-        type: App,
-        szukany: e.currentTarget.id
-      });
-    }else{
-      this.setState({
-        type: Printer,
-        szukany: e.currentTarget.id
-      });
-    }
-
+    this.setState({
+      type: Printer,
+    });
+    console.log(e.currentTarget.id);
   };
 
   getFetchprinters() {
@@ -122,10 +112,9 @@ class App extends React.Component {
   componentDidMount() {
     this.getFetchprinters();
   }
-
   render() {
-    if (this.state.type === App) {
-      const { printers, typess, producents, error } = this.state;
+    const { printers, typess, producents, error } = this.state;
+    if (this.state.type === Printer) {
       return (
         <React.Fragment>
           <div>
@@ -206,6 +195,18 @@ class App extends React.Component {
                   <button id={ID} onClick={this.modal}>
                     Show Printer
                   </button>
+                  <div class="modal" id={ID}>
+                    <div class="modal-header">
+                      <div class="title">
+                        {Producent} {Model}
+                      </div>
+                      <div>{Desc}</div>
+                      <button data-close-button class="close-button">
+                        &times;
+                      </button>
+                    </div>
+                    <div class="modal-body">asd</div>
+                  </div>
                   <hr />
                 </div>
               );
@@ -213,44 +214,14 @@ class App extends React.Component {
           </div>
         </React.Fragment>
       );
-    }
-    else if (this.state.type === Printer){
-      const { printers, typess, producents, error } = this.state;
-      return (
-        <React.Fragment>
-          <div>
-            <link
-              href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-              rel="stylesheet"
-            />
-            
-            {error ? <p> {error.message} </p> : null}{" "}
-            {printers.map((printer) => {
-              const { ID, Producent, Model, Type, Price, Desc, Image } =
-                printer;
-                if(ID === this.state.szukany){
-                  return (
-                    <div>
-                      <button className="btn btn-outline-dark" id={"back"} onClick={this.modal}>
-                        Go back
-                      </button>
-                      <h1>{Producent} {Model}</h1>
-                      <img width="500" alt={Model} src={Image} />
-
-                      <p>Type: {Type}</p>
-                      <p>Price: {Price}</p>
-
-                      
-
-                    </div>
-                  );
-                }
-              
-            })}
-          </div>
-        </React.Fragment>
+    } else if (this.state.type === Printer) {
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(
+        <React.StrictMode>
+          <Printer />
+        </React.StrictMode>
       );
     }
   }
 }
-export default App;
+export default Printer;
