@@ -203,7 +203,7 @@ class App extends React.Component {
                   <p>Productent: {Producent}</p>
                   <p>Type: {Type}</p>
                   <p>Price: {Price}</p>
-                  <button id={ID} onClick={this.modal}>
+                  <button className="btn btn-outline-dark" id={ID} onClick={this.modal}>
                     Show Printer
                   </button>
                   <hr />
